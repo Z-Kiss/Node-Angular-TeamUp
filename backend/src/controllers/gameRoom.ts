@@ -1,7 +1,6 @@
 import express from "express";
 import {createRoom, getAllRooms, getRoomById, getRoomsByUserId} from "../db/gameRoom";
 import {handleError} from "../helpers";
-import {getUserBySessionToken} from "../db/user";
 import {get} from "lodash";
 import mongoose from "mongoose";
 
