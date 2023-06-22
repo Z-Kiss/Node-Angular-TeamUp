@@ -1,25 +1,25 @@
 import express from "express";
-import {createUser, getUserByEmail} from "../db/users";
-import {hashGenerator, saltGenerator} from "../helpers";
+import {createUser, getUserByEmail} from "../db/user";
+import {hashGenerator, saltGenerator, handleError} from "../helpers";
 
 export const login = async (req: express.Request, res: express.Response) => {
     try{
         const {email, password} = req.body;
 
         if (!email || !password){
-            return res.sendStatus(400);
+            return res.status(400).send('No email or password provided');
         }
 
         const user = await getUserByEmail(email).select('+authentication.salt +authentication.password');
 
         if(!user){
-            return res.sendStatus(400);
+            return res.status(400).send('Email not registered');
         }
 
         const expectedHash = hashGenerator(user.authentication.salt, password)
 
         if(user.authentication.password !== expectedHash){
-            return res.sendStatus(403)
+            return res.status(403).send('Not matching email/password');
         }
 
         const salt = saltGenerator();
@@ -30,8 +30,7 @@ export const login = async (req: express.Request, res: express.Response) => {
 
         return res.status(200).json(user).end()
     }catch (error){
-        console.log(error);
-        return res.sendStatus(400)
+       handleError(error, res)
     }
 }
 
@@ -41,15 +40,13 @@ export const register = async(req: express.Request, res: express.Response) =>{
         const {email, password, username} = req.body;
 
         if(!email || !password || !username){
-            console.log("1")
-            return res.sendStatus(400);
+            return res.status(400).send('No email/password/username provided');
         }
 
         const existingUser = await getUserByEmail(email);
 
         if(existingUser){
-            console.log("2")
-            return res.sendStatus(400);
+            return res.status(400).send('Email already in registered');
         }
 
         const salt = saltGenerator();
@@ -64,8 +61,6 @@ export const register = async(req: express.Request, res: express.Response) =>{
 
         return res.status(200).json(user).end();
     }catch (error){
-
-        console.log(error);
-        return res.sendStatus(400);
+        handleError(error, res)
     }
 }
