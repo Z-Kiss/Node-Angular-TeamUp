@@ -1,11 +1,13 @@
 import express from "express";
 import authentication from './authentication'
-import users from "./users";
+import user from "./user";
+import gameRoom from "./gameRoom";
 
 const router = express.Router();
 
 export default (): express.Router => {
-    authentication(router)
-    users(router)
+    authentication(router);
+    user(router);
+    gameRoom(router);
     return router;
 }
