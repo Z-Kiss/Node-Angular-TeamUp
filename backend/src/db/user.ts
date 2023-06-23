@@ -1,16 +1,21 @@
 import {Schema, model} from "mongoose";
 
 const UserSchema = new Schema({
-    username: {type: String, required: true, uniq: true},
-    email: {type: String, required: true, uniq: true},
+    username: {type: String, required: true},
+    email: {type: String, required: true},
     authentication: {
         password: {type: String, select: false},
         salt: {type: String, select: false},
         sessionToken: {type: String, select: false},
     },
+    admin:{type: Boolean, default: false},
 })
 
+UserSchema.index({ username: 1, email: 1 }, { unique: true });
+
+//TODO ask for help about unique
 export const UserModel = model('User', UserSchema)
+
 export const getUsers = () => UserModel.find();
 export const getUserByEmail = (email: string) => UserModel.findOne({email});
 export const getUserBySessionToken = (sessionToken: string) => UserModel.findOne({'authentication.sessionToken': sessionToken})
