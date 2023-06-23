@@ -1,8 +1,15 @@
 import express from "express";
 
-import {isAuthenticated} from "../middlewares";
+import {isAuthenticated, isAuthorized} from "../middlewares";
 
-import {createGameRoom, getAllGameRooms, getGameRoomById, getOwnGameRooms, joinGameRoom} from "../controllers/gameRoom";
+import {
+    createGameRoom,
+    deleteGameRoom,
+    getAllGameRooms,
+    getGameRoomById,
+    getOwnGameRooms,
+    joinGameRoom
+} from "../controllers/gameRoom";
 
 export default (router: express.Router) =>{
     router.get('/game-room/all',isAuthenticated, getAllGameRooms)
@@ -10,4 +17,5 @@ export default (router: express.Router) =>{
     router.get('/game-room/join/:gameRoomId', isAuthenticated, joinGameRoom)
     router.post('/game-room/create', isAuthenticated, createGameRoom)
     router.get('/game-room/own-rooms', isAuthenticated, getOwnGameRooms)
+    router.delete('/game-room/:id', isAuthenticated, isAuthorized, deleteGameRoom)
 }

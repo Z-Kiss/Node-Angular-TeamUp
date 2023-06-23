@@ -12,8 +12,10 @@ export const createGameRoom = async (req: express.Request, res: express.Response
         if(!roomName){
             return res.status(200).send('Missing information');
         }
+        const owner = get(req, 'identity._id') as mongoose.Types.ObjectId;
 
         const gameRoom = await createRoom({
+            owner,
             roomName
         });
 
@@ -84,7 +86,22 @@ export const getOwnGameRooms = async (req: express.Request, res: express.Respons
         handleError(error, res)
     }
 }
+export const deleteGameRoom = async (req: express.Request, res: express.Response) =>{
+    try{
+        console.log('yep')
+        const {id} = req.params;
 
+        const deletedRoom = await getRoomById(id);
+
+        if(!deletedRoom){
+            return res.send('No room Found')
+        }else {
+            return res.status(200).json(deletedRoom)
+        }
+    }catch(error){
+        handleError(error, res)
+    }
+}
 
 
 
