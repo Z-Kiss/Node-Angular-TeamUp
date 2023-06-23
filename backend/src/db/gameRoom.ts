@@ -2,11 +2,12 @@ import {Schema, model} from "mongoose";
 import {ObjectId} from "mongodb";
 
 const GameRoomSchema = new Schema({
+    owner:{type: Schema.Types.ObjectId, ref:'User', required: true},
     roomName: {type: String, required: true},
     gameTags: [{type: String}],
     memberTags: [{type: String}],
     uniqTags:[{type: String}],
-    members:[{type: Schema.Types.ObjectId, ref: 'user',  select: false}],
+    members:[{type: Schema.Types.ObjectId, ref: 'User',  select: false}],
 
 })
 
@@ -15,7 +16,7 @@ export const createRoom = (values: Record<string, any>) => new GameRoomModel(val
     .then((room) => room.toObject());
 export const getAllRooms = () => GameRoomModel.find();
 export const getRoomById = (id: String) => GameRoomModel.findById({_id: id});
-export const getRoomsByUserId = (id: ObjectId) => GameRoomModel.find({members: id});
+export const getRoomsByUserId = (id: ObjectId) => GameRoomModel.find({owner: id});
 export const getRoomsByGameTag = (tag: string) => GameRoomModel.find({gameTags: tag});
 export const getRoomsByGameTags = (tag: [string]) => GameRoomModel.find({gameTags: { $all: tag}});
 export const getRoomsByMemberTag = (tag: string) => GameRoomModel.find({memberTags: tag});
