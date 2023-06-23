@@ -36,8 +36,6 @@ export const isAuthorized = async (req: express.Request, res: express.Response, 
         }else {
             return res.sendStatus(403);
         }
-
-        return next();
     }catch (error) {
         handleError(error, res)
     }
