@@ -9,6 +9,14 @@ import router from "./router";
 
 const app = express();
 
+declare module 'express' {
+    export interface Request {
+        gameRoom?: Record<string, any>,
+        gameRoomId?: string,
+        identity?: Record<string, any>
+    }
+}
+
 app.use(cors({
     credentials: true,
 }));
@@ -29,5 +37,11 @@ mongoose.Promise = Promise;
 mongoose.connect(MONGO_URL);
 mongoose.connection.on('error',(error: Error) => console.log(error))
 
+
+
+
 app.use('/', router())
+
+// hibakezelo middleware
+//nest.js
 
