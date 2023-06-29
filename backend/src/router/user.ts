@@ -1,10 +1,11 @@
 import express from "express";
 
 import {deleteUser, findUserById, getAllUsers} from "../controllers/user";
-import {isAuthenticated, isAuthorized} from "../middlewares";
+import {deleteRequestIsAuthorized, isAuthenticated} from "../middlewares";
 
 export default (router: express.Router) =>{
-    router.get('/user/all',isAuthenticated, getAllUsers)
-    router.get('/user/find/:id', isAuthenticated, findUserById)
-    router.delete('/user/:id', isAuthenticated, isAuthorized, deleteUser)
+    router.use('/user',isAuthenticated)
+    router.get('/user/all', getAllUsers)
+    router.get('/user/find/:id', findUserById)
+    router.delete('/user/:id', deleteRequestIsAuthorized, deleteUser)
 };
