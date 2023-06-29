@@ -16,13 +16,13 @@ export const login = async (req: express.Request, res: express.Response) => {
             return res.status(400).send('Email not registered');
         }
 
-        const expectedHash = hashGenerator(user.authentication.salt, password)
+        const expectedHash: string = hashGenerator(user.authentication.salt, password)
 
         if(user.authentication.password !== expectedHash){
             return res.status(403).send('Not matching email/password');
         }
 
-        const salt = saltGenerator();
+        const salt : string = saltGenerator();
         user.authentication.sessionToken = hashGenerator(salt, user._id.toString());
 
         await user.save();
