@@ -7,7 +7,17 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 import router from "./router";
 
+const dotenv = require("dotenv");
+dotenv.config();
 const app = express();
+
+declare module 'express' {
+    export interface Request {
+        gameRoom?: Record<string, any>,
+        gameRoomId?: string,
+        identity?: Record<string, any>
+    }
+}
 
 app.use(cors({
     credentials: true,
@@ -23,10 +33,10 @@ server.listen(8080, () =>{
     console.log('Server running on http://localhost:8080')
 })
 
-const MONGO_URL = 'mongodb+srv://Zoty:nGpkbzVR8RqNLdpx@teamup.ezjz8af.mongodb.net/?retryWrites=true&w=majority'
+// const MONGO_URL = 'mongodb+srv://Zoty:nGpkbzVR8RqNLdpx@teamup.ezjz8af.mongodb.net/?retryWrites=true&w=majority'
 
 mongoose.Promise = Promise;
-mongoose.connect(MONGO_URL);
+mongoose.connect(process.env.MONGO_URL);
 mongoose.connection.on('error',(error: Error) => console.log(error))
 
 app.use('/', router())
