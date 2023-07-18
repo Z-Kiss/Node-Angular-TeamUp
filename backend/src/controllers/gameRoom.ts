@@ -7,12 +7,14 @@ import mongoose from "mongoose";
 
 export const createGameRoom = async (req: express.Request, res: express.Response) => {
     try {
+
         const {roomName} = req.body;
 
-        if(!roomName){
+        if (!roomName) {
             return res.status(200).send('Missing information');
         }
-        const owner = get(req, 'identity._id') as mongoose.Types.ObjectId;
+
+        const owner: mongoose.Types.ObjectId = req.identity._id;
 
         const gameRoom = await createRoom({
             owner,
@@ -27,14 +29,10 @@ export const createGameRoom = async (req: express.Request, res: express.Response
 }
 export const joinGameRoom = async (req: express.Request, res: express.Response) => {
     try {
-        const gameRoomId: string = req.params.gameRoomId;
 
-        if (!gameRoomId) {
-            return res.status(400).send('Missing gameRoomId');
-        }
-        const gameRoom = await getRoomById(gameRoomId).select('+members');
+        const gameRoom = await getRoomById(req.gameRoomId).select('+members');
 
-        const currentUserId = get(req, 'identity._id') as mongoose.Types.ObjectId;
+        const currentUserId: mongoose.Types.ObjectId = get(req, 'identity._id') as mongoose.Types.ObjectId;
 
         gameRoom.members.push(currentUserId);
         gameRoom.save();
@@ -46,6 +44,7 @@ export const joinGameRoom = async (req: express.Request, res: express.Response) 
 }
 export const getAllGameRooms = async (req: express.Request, res: express.Response) => {
     try {
+
         const gameRooms = await getAllRooms();
 
         return res.status(200).json(gameRooms).end();
@@ -54,58 +53,28 @@ export const getAllGameRooms = async (req: express.Request, res: express.Respons
     }
 }
 
-export const getGameRoomById = async (req: express.Request, res: express.Response) => {
+export const getOwnGameRooms = async (req: express.Request, res: express.Response) => {
     try {
-        const {id} = req.params;
 
-        if (!id) {
-            return res.status(400).send('Id not provided').end();
-        }
-
-        const gameRoom = await getRoomById(id);
-
-        if (!gameRoom) {
-            return res.status(400).send('Room not exist');
-        } else {
-            return res.status(200).json(gameRoom).end();
-        }
-    } catch (error) {
-        handleError(error, res);
-    }
-}
-
-export const getOwnGameRooms = async (req: express.Request, res: express.Response) =>{
-    try{
-
-        const currentUserId = get(req, 'identity._id') as mongoose.Types.ObjectId;
+        const currentUserId: mongoose.Types.ObjectId = get(req, 'identity._id') as mongoose.Types.ObjectId;
 
         const gameRooms = await getRoomsByUserId(currentUserId);
 
         return res.status(200).json(gameRooms).end()
-    }catch(error){
+    } catch (error) {
         handleError(error, res)
     }
 }
-export const deleteGameRoom = async (req: express.Request, res: express.Response) =>{
-    try{
-        console.log('yep')
-        const {id} = req.params;
+export const deleteGameRoom = async (req: express.Request, res: express.Response) => {
+    try {
+        const deletedRoom = await getRoomById(req.gameRoomId);
 
-        const deletedRoom = await getRoomById(id);
+        return res.status(200).json(deletedRoom)
 
-        if(!deletedRoom){
-            return res.send('No room Found')
-        }else {
-            return res.status(200).json(deletedRoom)
-        }
-    }catch(error){
+    } catch (error) {
         handleError(error, res)
     }
 }
-
-
-
-
 
 
 // export const joinGameRoom = async (req: express.Request, res: express.Response) =>{

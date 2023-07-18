@@ -1,26 +1,24 @@
 import express from "express";
-import {get, merge} from 'lodash';
 import {handleError} from "../helpers";
 import {getUserById, getUserBySessionToken} from "../db/user";
-
-import {ObjectId} from "mongodb";
 import {getRoomById} from "../db/gameRoom";
 
-export const isAuthorized = async (req: express.Request, res: express.Response, next: express.NextFunction) =>{
+export const deleteRequestIsAuthorized = async (req: express.Request, res: express.Response, next: express.NextFunction) =>{
     try{
 
-        const userId = get(req, 'identity._id') as ObjectId;
-        const isAdmin = get(req, 'identity.admin') as Boolean;
+        const userId = req.identity._id;
+        const isAdmin = req.identity.admin;
         const { id } = req.params;
 
         if(!id){
             return res.status(403).send('No Id provided').end();
         }
 
-        const room = await getRoomById(id);
+        const room: Record<string, any> = req.gameRoom;
         const user = await getUserById(id);
 
         let isOwner = false;
+
         if(user){
             if (id === userId.toString()){
                 isOwner = true;
@@ -43,6 +41,7 @@ export const isAuthorized = async (req: express.Request, res: express.Response, 
 
 export const isAuthenticated = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     try {
+
         const sessionToken = req.cookies['AUTH'];
 
         if (!sessionToken) {
@@ -55,8 +54,30 @@ export const isAuthenticated = async (req: express.Request, res: express.Respons
             return res.sendStatus(400);
         }
 
-        merge(req, {identity: existingUser});
+        req.identity = existingUser;
 
+        return next();
+    } catch (error) {
+        handleError(error, res)
+    }
+}
+
+export const isRoomExist = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    try {
+        const {id} = req.params;
+
+        if (!id) {
+            return res.status(400).send('Id not provided').end();
+        }
+
+        const gameRoom = await getRoomById(id);
+
+        if (!gameRoom) {
+            return res.status(400).send('Room not exist');
+        } else {
+           req.gameRoom = gameRoom;
+           req.gameRoomId = id;
+        }
         return next();
     } catch (error) {
         handleError(error, res)

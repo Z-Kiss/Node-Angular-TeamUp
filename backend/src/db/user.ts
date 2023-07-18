@@ -1,8 +1,8 @@
 import {Schema, model} from "mongoose";
 
 const UserSchema = new Schema({
-    username: {type: String, required: true},
-    email: {type: String, required: true},
+    username: {type: String, required: true, unique: true},
+    email: {type: String, required: true, unique: true},
     authentication: {
         password: {type: String, select: false},
         salt: {type: String, select: false},
@@ -11,7 +11,6 @@ const UserSchema = new Schema({
     admin:{type: Boolean, default: false},
 })
 
-UserSchema.index({ username: 1, email: 1 }, { unique: true });
 
 //TODO ask for help about unique
 export const UserModel = model('User', UserSchema)
