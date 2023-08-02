@@ -3,14 +3,14 @@ import {handleError} from "../helpers";
 import {getUserById, getUserBySessionToken} from "../db/user";
 import {getRoomById} from "../db/gameRoom";
 
-export const deleteRequestIsAuthorized = async (req: express.Request, res: express.Response, next: express.NextFunction) =>{
-    try{
+export const deleteRequestIsAuthorized = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    try {
 
         const userId = req.identity._id;
         const isAdmin = req.identity.admin;
-        const { id } = req.params;
+        const {id} = req.params;
 
-        if(!id){
+        if (!id) {
             return res.status(403).send('No Id provided').end();
         }
 
@@ -19,22 +19,22 @@ export const deleteRequestIsAuthorized = async (req: express.Request, res: expre
 
         let isOwner = false;
 
-        if(user){
-            if (id === userId.toString()){
+        if (user) {
+            if (id === userId.toString()) {
                 isOwner = true;
             }
-        }else if(room){
-            if(room.owner.toString() === userId.toString()){
+        } else if (room) {
+            if (room.owner.toString() === userId.toString()) {
                 isOwner = true;
             }
         }
 
-        if( isAdmin || isOwner ){
+        if (isAdmin || isOwner) {
             return next();
-        }else {
+        } else {
             return res.sendStatus(403);
         }
-    }catch (error) {
+    } catch (error) {
         handleError(error, res)
     }
 }
@@ -75,8 +75,8 @@ export const isRoomExist = async (req: express.Request, res: express.Response, n
         if (!gameRoom) {
             return res.status(400).send('Room not exist');
         } else {
-           req.gameRoom = gameRoom;
-           req.gameRoomId = id;
+            req.gameRoom = gameRoom;
+            req.gameRoomId = id;
         }
         return next();
     } catch (error) {

@@ -7,7 +7,6 @@ const GameRoomSchema = new Schema({
     gameTags: [{type: String}],
     roomTags: [{type: String}],
     members:[{type: Schema.Types.ObjectId, ref: 'User',  select: false}],
-
 })
 
 export const GameRoomModel = model('GameRoom', GameRoomSchema);

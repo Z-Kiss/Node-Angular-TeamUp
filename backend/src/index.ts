@@ -5,10 +5,11 @@ import cookieParser from 'cookie-parser';
 import compression from 'compression';
 import cors from 'cors';
 import mongoose from 'mongoose';
-import router from "./router";
+import router from "./controllers";
+import {schema} from './env';
+import { load } from 'ts-dotenv';
+const env = load(schema, './src/.env');
 
-const dotenv = require("dotenv");
-dotenv.config();
 const app = express();
 
 declare module 'express' {
@@ -33,17 +34,8 @@ server.listen(8080, () =>{
     console.log('Server running on http://localhost:8080')
 })
 
-// const MONGO_URL = 'mongodb+srv://Zoty:nGpkbzVR8RqNLdpx@teamup.ezjz8af.mongodb.net/?retryWrites=true&w=majority'
-
 mongoose.Promise = Promise;
-mongoose.connect(process.env.MONGO_URL);
+mongoose.connect(env.MONGO_URL);
 mongoose.connection.on('error',(error: Error) => console.log(error))
 
-
-
-
 app.use('/', router())
-
-// hibakezelo middleware
-//nest.js
-
