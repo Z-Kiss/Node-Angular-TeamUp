@@ -29,14 +29,18 @@ To run as Developer mode:
 
 After cloneing the repository, you need to install the dependencies.
 
-For install dependencies :
+1. For install dependencies :
 
 - Use this command from the _backend_ directory.
     ```
     npm install
     ```
+
     
-For starting the Application simply run the _StartApplication.sh_
+2. Fill out _.env_ file with the connection URL of your MongoDB
+
+    
+3. For starting the Application simply run the _StartApplication.sh_
 
 - Use this command from the _backend_ directory.
     ```
@@ -45,7 +49,6 @@ For starting the Application simply run the _StartApplication.sh_
 
 
 ### **Implemented Features**
-
 
 
 #### **Secure User Interactions**
@@ -63,22 +66,11 @@ For starting the Application simply run the _StartApplication.sh_
     
 ### **Future plans**
 
-    
-    - further implement Card Detailed information where you can write a more detailed description about the task
-    - create a better system for showing Errors, such as:
-        not logged in when User want to create Board
-        password/email mismatch
-        already existing Username, Email
-        etc...
-    - implement Rename Board, Column, Card
-    - restrict Guest actions:
-        restrict Guest to delete any board, and handle Guest Boards delete either by time or with different approach
-        restrict Rename any component that not made by current logged in Guest
-    - implement Search bar functionality:
-        I think it will be usefull if you have more boards as a User or as Guest you can search in those already created
-    - implement User page:
-        where the User can create a personal profile page
-    - further implement Admin role:
-        be able to delete Users or content
+    - Further improve backend:
+        - Users will be able to joing GameRooms
+        - Users will be able to search GameRooms by Tags
+        - Give more authority to owner of the GameRoom (kick, ban members of the room)
+    - Chat functionality
+    - Angular Frontend
    
 
