@@ -13,16 +13,16 @@ Backend has its basic functionality. Next step is the creating Frontend with Ang
 ### **Built With**
 
 #### ***Backend***
-    -Node.Js
-    -Typescript
-    -MongoDB
+- Node.Js
+- Typescript
+- MongoDB
 
 ### **Prerequisites**
 
 To run as Developer mode:
 
-    Node.js
-    How to install: https://nodejs.org/en/download
+- Node.js
+How to install: https://nodejs.org/en/download
 
 
 ### **Getting Started as Developer mode**
@@ -53,24 +53,24 @@ After cloneing the repository, you need to install the dependencies.
 
 #### **Secure User Interactions**
     
-    - Register, Login. Endpoints (except login, register) only accessible if you are logged in .
+- Register, Login. Endpoints (except login, register) only accessible if you are logged in .
 
 #### **Create GameRooms**
 
-    - You are able to create GameRooms where you later can add Tags. 
+- You are able to create GameRooms where you later can add Tags. 
 
 #### **Create Tags**
 
-    - Tags funcionality to distinct GameRooms by specific games and/or intreset of gamers
+- Tags funcionality to distinct GameRooms by specific games and/or intreset of gamers
 
     
 ### **Future plans**
 
-    - Further improve backend:
-        - Users will be able to joing GameRooms
-        - Users will be able to search GameRooms by Tags
-        - Give more authority to owner of the GameRoom (kick, ban members of the room)
-    - Chat functionality
-    - Angular Frontend
+- Further improve backend:
+    - Users will be able to joing GameRooms
+    - Users will be able to search GameRooms by Tags
+    - Give more authority to owner of the GameRoom (kick, ban members of the room)
+- Chat functionality
+- Angular Frontend
    
 
